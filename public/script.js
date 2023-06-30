@@ -1,3 +1,4 @@
+(() => {
 const container = document.getElementById("container");
 const cube = document.getElementById("cube");
 const seed = document.querySelector("#seed")
@@ -185,3 +186,4 @@ setTimeout(() => {
     });
   }, 1000)
 }, 100)
+})();
