@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+         .side-text {position: absolute; inset: 0;}
+         .logo {width: 128px; height: 390px; position: static;}
+         .logo-image {width: 128px; height: 128px; position: absolute; left: 124px;top: 811px; transform-origin: 0 0; transform: rotate(-90deg) scale(1, 1);}
+         .title {color: #050314; text-align: left; font: 700 64px 'Source Code Pro', sans-serif; position: absolute; left: 145px;top: 666px; width: 245px; height: 50px; transform-origin: 0 0; transform: rotate(-90deg) scale(1, 1);}
+         .description {color: #050314; text-align: center; font: 600 15px 'Source Code Pro', sans-serif; position: absolute; left: 282px;top: 811px; width: 390px; height: 208px; transform-origin: 0 0; transform: rotate(-90deg) scale(1, 1);}
+         .instruction {position: absolute; inset: 0;}
+         .fold {color: #000000; text-align: center; font: 400 14px 'Patrick Hand', sans-serif; position: absolute; left: 274.86px;top: 62.58px; transform-origin: 0 0; transform: rotate(-95deg) scale(1, 1); display: flex;align-items: center;justify-content: center}
+         .arrow {position: absolute; left: 273.12px;top: 62.58px; overflow: visible;}
+         .card-front {position: absolute; left: 25mm;top: 91.58px;}
+         .card-back {position: absolute; inset: 0;}
+         .bg {position: absolute; left: 297px;top: 91.58px;}
+         .scan-here {width: 115px; height: 227px; position: static;}
+         .link {color: #ffffff; text-align: center; font: 600 17px 'Source Code Pro', sans-serif; position: absolute; left: 102.5mm;top: 64mm; transform-origin: 0 0; transform: rotate(-90deg) scale(1, 1); display: flex;align-items: center;justify-content: center}
+      </style>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Source+Code+Pro:wght@600;700&display=swap" rel="stylesheet">
+      <script src="https://unpkg.com/@bitjson/qr-code@1.0.2/dist/qr-code.js"></script>
+      <title>Keybox Card</title>
+      <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" async
+        integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M" crossorigin="anonymous">
+      </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+   </head>
+   <body>
+      <div id="paper" style="width: 210mm; height: 297mm">
+         <div class="side-text">
+            <div class="logo">
+               <img class="logo-image" src="logo-image.png" />
+               <div class="title">Keybox</div>
+            </div>
+            <div class="description">
+               Keep this safe! This is your Keybox card.<br />This contains your keybox
+               seed.<br />This can be used to recover your accounts or to use the android
+               script.<br />If you want, laminate it.<br /><br />For more info, visit
+               example.com/?docs
+            </div>
+         </div>
+         <div class="instruction">
+            <div class="fold">fold</div>
+            <svg
+               class="arrow"
+               width="48"
+               height="16"
+               viewBox="0 0 48 16"
+               fill="none"
+               xmlns="http://www.w3.org/2000/svg"
+               >
+               <path
+                  d="M47.8794 15.5798C47.8794 12.5858 43.6332 8.02501 41.3238 5.57983C37.6702 1.71129 36.6837 0.579834 31.3238 0.579834C22.267 0.579834 16.9671 3.67865 10.6572 9.35761C9.47172 10.4245 5.49956 15.7556 3.1016 13.3576C1.93332 12.1893 -0.712702 5.11409 0.379379 7.07983C2.04274 10.0739 1.52876 15.5798 5.37938 15.5798C9.9733 15.5798 12.6746 14.9814 16.8794 13.5798"
+                  stroke="black"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                  />
+            </svg>
+         </div>
+         <img class="card-front" src="card-front.png" style="width: 53.98mm; height: 85.6mm" />
+         <div class="card-back" style="width: 53.98mm; height: 85.6mm">
+            <img class="bg" src="bg.png" style="width: 100%; height: 100%" />
+            <div class="scan-here">
+               <div class="link">vo.la/keybox</div>
+               <qr-code contents="" module-color="#000" position-ring-color="#fff" position-center-color="#fff" style="background: #000; width: 40mm; height: 40mm; position: absolute; left: 86.5mm;bottom: -60mm; transform-origin: 0 0; transform: rotate(-90deg) scale(1, 1);  -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;">
+                  <canvas id="identicon" width="26" height="26" slot="icon"></canvas>
+               </qr-code>
+            </div>
+         </div>
+      </div>
+      <script>
+         function main() {
+            const url = new URL(window.location.href)
+            seed = Number(prompt('Your Keybox seed\n(if you like to generate one, leave it blank)', window.localStorage.getItem('seed') || ''))
+            if (!seed) {
+               window.location.href = 'https://keybox.netlify.app'
+               return
+            }
+            document.querySelector("body > div > div.card-back > div > qr-code").setAttribute('module-color', '#fff')
+            document.querySelector("body > div > div.card-back > div > qr-code").setAttribute('contents', seed)
+            function printWithIcon(){
+               if(typeof jdenticon !== "undefined"){
+                  jdenticon.update("#identicon", seed)
+                  try {
+                     window.print()
+                  } finally {
+                     setTimeout(function () {
+                        if (confirm("Would you like to go back?\n(If you don't see a print prompt, your browser may not support printing. Try again on your PC.)")) {
+                           history.back();
+                           window.close();
+                           window.location.href = 'https://keybox.netlify.app'
+                        }
+                     }, 100);
+                  }
+               }
+               else{
+                  setTimeout(printWithIcon, 50);
+               }
+            }
+            printWithIcon()
+         }
+         main()
+      </script>
+   </body>
+</html>
