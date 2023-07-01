@@ -1,11 +1,12 @@
 (() => {
 const container = document.getElementById("container");
 const cube = document.getElementById("cube");
-const seed = document.querySelector("#seed")
-const wordsSpan = document.querySelector("#words")
-const numSpan = document.querySelector("#num")
-const appInput = document.querySelector("#appName")
-const usernameInput = document.querySelector("#user")
+const seed = document.getElementById("seed")
+const wordsSpan = document.getElementById("words")
+const numSpan = document.getElementById("num")
+const appInput = document.getElementById("appName")
+const usernameInput = document.getElementById("user")
+const saveCheckbox = document.getElementById('save')
 
 var onInput = false;
 var onSpan = false;
@@ -14,10 +15,6 @@ var lastMouseX = 0;
 var lastMouseY = 0;
 var rotationX = 0;
 var rotationY = 360;
-
-const tiles = document.querySelectorAll(".tile");
-
-const imgElements = document.getElementsByTagName("img");
 
 let selectedImages = "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
 
@@ -60,7 +57,6 @@ function updatePassword() {
     numSpan.textContent = '.'
     return
   }
-  window.localStorage.setItem('seed', seed.value);
   const appHashPromise = hashValueOf(appInput.value.trim().toLowerCase())
   const userHashPromise = hashValueOf(usernameInput.value.trim().toLowerCase())
 
@@ -81,11 +77,12 @@ for (const folder in images) {
       img.src = `https://firebasestorage.googleapis.com/v0/b/web-keybox.appspot.com/o/${folder}%2F${element}?alt=media`
       img.setAttribute('data-imgId', element)
       img.addEventListener("click", function () {
-        jdenticon.update("#identicon", seed.value)
         selectedImages += this.getAttribute('data-imgId') + ','
         hashValueOf(selectedImages)
           .then(result => {
             seed.value = result
+            jdenticon.update("#identicon", seed.value)
+            if (saveCheckbox.checked) { window.localStorage.setItem('seed', seed.value); }
             updatePassword()
           })
       });
@@ -93,6 +90,18 @@ for (const folder in images) {
     });
   }
 }
+
+saveCheckbox.checked = window.localStorage.getItem('saveSeed') === 'true'
+seed.value = window.localStorage.getItem('seed')
+if (seed.value) { jdenticon.update("#identicon", seed.value) }
+saveCheckbox.addEventListener("click", function () {
+  window.localStorage.setItem('saveSeed', saveCheckbox.checked)
+  if (saveCheckbox.checked) {
+    window.localStorage.setItem('seed', seed.value);
+  } else {
+    window.localStorage.removeItem('seed')
+  }
+})
 
 setTimeout(() => {
   cube.style = "transform: rotateX(0deg) rotateY(360deg); transition: transform 1s";

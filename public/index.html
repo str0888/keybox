@@ -28,20 +28,20 @@
     <div style="margin-top: 100px;">
        <div style="display: flex; align-items: center;">
           <input type="number" placeholder='Seed' id="seed" title="Double-click here to get your seed." style="width: 74px; color: rgba(22, 31, 39, 0);"></input>
-          <button onclick="selectedImages=''; document.querySelector('#seed').value = ''">Clear</button>
+          <button onclick="selectedImages=''; document.querySelector('#seed').value = ''; document.getElementById('identicon').getContext('2d').clearRect(0, 0, 41, 41)">Clear</button>
           <canvas id="identicon" width="41" height="41"></canvas>
        </div>
        <div style="display: flex; align-items: center;"></div>
          <input type="text" placeholder='App' id="appName"></input>
        </div>
        <input type="text" placeholder='Username' id="user"></input>
-       <div style="display: flex; align-items: center;">
+       <div id="output">
           <span id="words" style="color: #286bcc;">.</span>
           <span style="color: #9cdcfe;">.</span>
           <span id="num" style="color: #dcbb6d;">.</span>
        </div>
        <br>
-       <input type="checkbox" id="save" title="⚠️ Not recommended for public PCs.">
+       <input type="checkbox" id="save" title="⚠️ Not recommended for public PCs."/>
        <label for="save" title="⚠️ Not recommended for public PCs.">Remember Seed</label>
     </div>
   </div>
